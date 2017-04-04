@@ -99,12 +99,35 @@ MemoryError                               Traceback (most recent call last)
 
 MemoryError: 
 
+
+I run the code for the 2nd try, the code of the table ways_nodes, a different kind of error happened.  
+# create the other tables, ways_nodes
+cur.execute('DROP TABLE IF EXISTS ways_nodes')conn.commit()
+cur.execute('''create table ways_nodes(id INTEGER, node_id INTEGER, position INTEGER)''')
+conn.commit()
+with open('ways_nodes.csv','rb') as fin:
+    dr = csv.DictReader(fin)
+    to_db =[(i['id'],i['node_id'],i['position']) for i in dr]
+cur.executemany('INSERT INTO way_nodes(id, node_id, position) VALUES (?,?,?);', to_db)
+conn.commit()    
+
+OperationalError                          Traceback (most recent call last)
+<ipython-input-17-33e6f70925eb> in <module>()
+      7     dr = csv.DictReader(fin)
+      8     to_db =[(i['id'],i['node_id'],i['position']) for i in dr]
+----> 9 cur.executemany('INSERT INTO way_nodes(id, node_id, position) VALUES (?,?,?);', to_db)
+     10 conn.commit()
+
+OperationalError: no such table: way_nodes
+
+
 #check the data imported correctly
 cur.execute('SELECT * FROM nodes_tags')
 all_rows = cur.fetchall()
 print('1):')
 pprint(all_rows)
 
+## no resultes after this code, even not print of 1):
 
   File "<ipython-input-32-93e44d98b3b2>", line 1
     @check the data imported correctly
